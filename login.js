@@ -1,4 +1,3 @@
-
 import { auth, onAuthStateChanged, signInWithEmailAndPassword,  } from "./config.js";
 
 window.signIn = (event) => {
@@ -10,7 +9,6 @@ window.signIn = (event) => {
             // Signed in 
             const user = userCredential.user;
             console.log("user", user)
-            window.location.href = "./dashboard.html"
             // ...
         })
         .catch((error) => {
@@ -28,9 +26,8 @@ function getUser() {
             const uid = user.uid;
             console.log("ye user login he abhi", user)
             setTimeout(() => {
-            window.location.href = "./dashboard.html"
-                
-            }, 1000);
+                window.location.href = "./dashboard.html"
+            }, 2000);
             // ...
         } else {
             // User is signed out

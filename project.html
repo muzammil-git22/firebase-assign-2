@@ -32,7 +32,8 @@
             <nav class="flex-1 px-4 py-6">
                 <ul class="space-y-1">
                     <li>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md bg-gray-100 text-gray-900">
+                        <a href="./dashboard.html"
+                            class="flex items-center gap-3 px-3 py-2 rounded-md bg-gray-100 text-gray-900">
                             <span class="w-5 h-5">🏠</span>
                             <span>Overview</span>
                         </a>
@@ -44,7 +45,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50">
+                        <a href="./users.html" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50">
                             <span class="w-5 h-5">👥</span>
                             <span>Users</span>
                         </a>
@@ -74,13 +75,14 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <div class="relative">
+                    <div class="relative"> 
                         <input type="text" placeholder="Search..."
                             class="hidden sm:block w-64 px-3 py-2 border rounded-md focus:outline-none focus:ring" />
                     </div>
                     <button class="p-2 rounded-full hover:bg-gray-100">🔔</button>
                     <div class="flex items-center gap-2">
-                        <img src="https://avatars.githubusercontent.com/u/53353729?v=4" alt="avatar" class="w-8 h-8 rounded-full" />
+                        <img src="https://avatars.githubusercontent.com/u/53353729?v=4" alt="avatar"
+                            class="w-8 h-8 rounded-full" />
                         <span class="hidden sm:inline-block text-sm">Arham</span>
                     </div>
                 </div>
@@ -89,8 +91,9 @@
             <!-- Content container -->
             <main class="p-6 overflow-auto">
 
-                <!-- Stats cards -->
-                
+                <ul id="users" >
+               
+                </ul>
 
                 <!-- Footer area -->
                 <footer class="mt-6 text-sm text-gray-500">
@@ -104,20 +107,22 @@
     <!-- Mobile sidebar (simple off-canvas, toggled with JS) -->
     <div id="mobile-sidebar" class="fixed inset-0 z-40 bg-black bg-opacity-40 hidden">
         <div class="w-64 bg-white h-full p-6">
-            <button id="mobile-close" class="mb-4">Close✕</button>
+            <button id="mobile-close" class="mb-4">Close ✕</button>
             <nav>
-                <a href="./dashboard.html" class="block py-2">Overview</a>
-                <a href="./project.html" class="block py-2">Projects</a>
-                <a href="./user.html" class="block py-2">Users</a>
-                <a href="./setting.html" class="block py-2">Settings</a>
+                <a href="#" class="block py-2">Overview</a>
+                <a href="#" class="block py-2">Projects</a>
+                <a href="#" class="block py-2">Users</a>
+                <a href="#" class="block py-2">Settings</a>
             </nav>
         </div>
     </div>
 
-    <script type="module" src="user.js"></script>
+    <script type="module" src="friendRequests.js"></script>
     <script type="module" src="config.js"></script>
 
-    
+    <script>
+
+    </script>
 </body>
 
 </html>
