@@ -27,7 +27,7 @@ function getUser() {
             console.log("ye user login he abhi", user)
             setTimeout(() => {
                 window.location.href = "./dashboard.html"
-            }, 2000);
+            }, 3000);
             // ...
         } else {
             // User is signed out

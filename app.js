@@ -1,6 +1,5 @@
 import { auth, createUserWithEmailAndPassword, db, doc, setDoc } from "./config.js"
-import { getUser } from "./login.js"
-
+// import { getUser} from "./login.js"
 let email = document.getElementById("email")
 let password = document.getElementById("password")
 let firstName = document.getElementById("firstName")
@@ -26,6 +25,9 @@ window.signUp = (event) => {
             const user = userCredential.user;
             saveDataToDb(firstName, lastName, email, phoneNumber, user.uid);
             console.log(user, 'sahi chal gaya')
+    setTimeout(() => {
+        window.location.href = "./dashboard.html"
+    }, 4000);
             // ...
         })
         .catch((error) => {
@@ -37,8 +39,7 @@ window.signUp = (event) => {
 
     }
     
-    debugger
-    
+ 
  async function saveDataToDb(firstName, lastName, email, phoneNumber, userId) {
     console.log("running");
     await setDoc(doc(db, "users", userId), {
@@ -52,5 +53,4 @@ window.signUp = (event) => {
 }
 
 
-
-getUser()
+// getUser()
