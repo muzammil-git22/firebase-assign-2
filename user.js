@@ -1,5 +1,6 @@
 import { arrayUnion, auth, collection, db, doc, getDocs, onAuthStateChanged, query, setDoc, signOut, where } from "./config.js";
 function getUser() {
+    
     onAuthStateChanged(auth, (user) => {
         if (user) {
             // User is signed in, see docs for a list of available properties
@@ -15,7 +16,7 @@ function getUser() {
         }
     });
 }
-getUser()
+
 async function getUsers(currentUserId) {
     const q = query(collection(db, "users"), where("userId", "!=", currentUserId));
     let userContainer = document.getElementById("users")
@@ -60,8 +61,8 @@ Add Friend
 </button>
 
 
-<button class="btn-message inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 text-sm text-gray-700 hover:bg-gray-200 transition">
-View
+<button id="remove" class="btn-message inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 text-sm text-gray-700 hover:bg-gray-200 transition">
+Remove
 </button>
 </div>
 </div>
@@ -73,10 +74,9 @@ View
 
   window.handleAddFriend =(friendId , currentUserId)=>{
       console.log(currentUserId , friendId)
-       const cityRef = doc(db, 'users', friendId);
-    setDoc(cityRef, { friendRequest: arrayUnion(currentUserId) }, { merge: true });
-  }    
-
+       const userRef = doc(db, 'users', friendId);
+    setDoc(userRef, { friendRequest: arrayUnion(currentUserId) }, { merge: true });
+ }    
   window.logOut = () => {
     signOut(auth).then(() => {
         console.log("log out ho chuka he")
@@ -87,3 +87,4 @@ View
         // An error happened.
     });
 }
+getUser()

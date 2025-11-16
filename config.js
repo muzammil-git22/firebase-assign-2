@@ -2,7 +2,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
   import { getAuth , createUserWithEmailAndPassword ,  signInWithEmailAndPassword ,onAuthStateChanged , signOut} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
- import { getFirestore , setDoc, getDocs ,doc,getDoc, collection, query,where , arrayUnion} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+ import { getFirestore , setDoc, deleteField,updateDoc ,getDocs ,doc,getDoc, collection, query,where , arrayUnion,arrayRemove} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
   
   const firebaseConfig = {
@@ -36,5 +36,8 @@ collection,
  query,
  getDocs,
   arrayUnion,
-  getDoc
+  getDoc,
+  updateDoc,
+  deleteField,
+  arrayRemove
   }
