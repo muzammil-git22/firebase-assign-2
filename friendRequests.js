@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, auth, collection, db, doc, getDoc, getDocs, onAuthStateChanged, query, updateDoc, where } from "./config.js";
+import { arrayRemove, arrayUnion, auth, collection, db, doc, getDoc, getDocs, onAuthStateChanged, query, signOut, updateDoc, where } from "./config.js";
 
 let friendRequestsContainer = document.getElementById("friendRequests")
 function getUser() {
@@ -26,20 +26,28 @@ if (docSnap.exists()) {
   currentUserData = docSnap.data()
   console.log(currentUserData)
 } else {
-  // docSnap.data() will be undefined in this case
+
   console.log("No such document!");
 }
-debugger
+
 const {friendRequest} = currentUserData
 console.log(friendRequest)
+if (!friendRequest || friendRequest.length === 0) {
+        console.log("No friend requests, skipping query.");
+        
+       
+        friendRequestsContainer.innerHTML = `<p class="text-center text-gray-500">Koi friend request nahi hai.</p>`;
+        return; 
+    }
+friendRequestsContainer.innerHTML = ""
  const usersRef = collection(db, "users");
     const q = query(usersRef, where('userId', 'in', friendRequest));
 const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         const data = doc.data()
-        const { firstName , lastName ,userId} = data|| {}
+        const { firstName , lastName} = data|| {}
         console.log(data , doc.id)
-  friendRequestsContainer.innerHTML = `<article class="friend-card bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow" data-user-id="2">
+  friendRequestsContainer.innerHTML += `<article id="Friend-cards" class="friend-card bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow" data-user-id="2">
 <div class="flex items-center gap-3">
 <div class="avatar w-16 h-16 rounded-xl flex-shrink-0 avatar-gradient overflow-hidden flex items-center justify-center text-white font-semibold text-lg">
 <img src="https://i.pravatar.cc/160?img=56" alt="User avatar" class="w-full h-full object-cover rounded-xl" loading="lazy">
@@ -73,7 +81,7 @@ Accept
 </button>
 
 
-<button id="remove" class="btn-message inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 text-sm text-gray-700 hover:bg-gray-200 transition">
+<button onClick="handleDeclineFriend('${doc.id}' , '${currentUserId}')"  class="btn-message inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 text-sm text-gray-700 hover:bg-gray-200 transition">
 Declear
 </button>
 </div>
@@ -82,7 +90,7 @@ Declear
 </article>`
     });
 }
-debugger
+
 window.handleAcceptFriend=async(friendId , currentUserId)=>{
 try{
    const usersRef = doc(db, "users", friendId );
@@ -95,12 +103,43 @@ const myRef = doc(db, "users", currentUserId );
 // Atomically remove a region from the "regions" array field.
 await updateDoc(myRef, {
     friendRequest: arrayRemove(friendId),
-    
+    friends: arrayUnion(friendId)
 });
+ let FriendCards = document.getElementById("Friend-cards");
+ FriendCards.innerHTML = "" 
+
 }catch(error){
 console.log(error)
 }
 
 
+}
+window.handleDeclineFriend = async (friendId, currentUserId) => {
+    try {
+        const myRef = doc(db, "users", currentUserId);
+
+        // Sirf 1 kaam: Apne document se 'friendRequest' ko remove karna hai.
+        await updateDoc(myRef, {
+            friendRequest: arrayRemove(friendId)
+        });
+
+        console.log(`Friend request from ${friendId} declined successfully.`);
+
+         let FriendCards = document.getElementById("Friend-cards");
+ FriendCards.innerHTML = "" 
+
+    } catch (error) {
+        console.error("Error declining friend request:", error);
+    }
+};
+  window.logOut = () => {
+    signOut(auth).then(() => {
+        console.log("log out ho chuka he")
+        window.location.href = "./login.html"
+        // Sign-out successful.
+    }).catch((error) => {
+        console.log(error, "error agaya he ")
+        // An error happened.
+    });
 }
 getUser()

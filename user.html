@@ -40,7 +40,7 @@
             <a href="./project.html"
               class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-50">
               <span class="w-5 h-5">📁</span>
-              <span>Projects</span>
+              <span>friendRequests</span>
             </a>
           </li>
           <li>
@@ -63,48 +63,9 @@
         <button onclick="logOut()" class="w-full px-3 py-2 bg-blue-600 text-white rounded-md">Log Out</button>
       </div>
     </aside>
-
-    <!-- Main -->
+    <div id="mains" class="w-full">
     <div class="flex-1 flex flex-col">
-
-      <!-- Topbar -->
-      <header class="flex items-center justify-between bg-white px-4 py-3 border-b">
-        <div class="flex items-center gap-4">
-          <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md hover:bg-gray-100">☰</button>
-          <h2 class="text-lg font-semibold">Users</h2>
-        </div>
-
-        <div class="flex items-center gap-4">
-          <div class="relative">
-            <input type="text" placeholder="Search..."
-              class="hidden sm:block w-64 px-3 py-2 border rounded-md focus:outline-none focus:ring" />
-          </div>
-          <button class="p-2 rounded-full hover:bg-gray-100">🔔</button>
-          <div class="flex items-center gap-2">
-            <img src="https://avatars.githubusercontent.com/u/53353729?v=4" alt="avatar" class="w-8 h-8 rounded-full" />
-            <span class="hidden sm:inline-block text-sm">Arham</span>
-          </div>
-        </div>
-      </header>
-
-      <!-- Content -->
-      <main class="p-6 overflow-auto">
-
-        <!-- USERS SECTION -->
-        <h3 class="text-xl font-semibold mb-4">People You May Know</h3>
-
-        <div id="friends-list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- Example user -->
-         <div id="users" class="w-full  flex items-center justify-between no-rap">
-        
-
-        </div>
-        </div>
-
-        <footer class="mt-8 text-sm text-gray-500">
-          © <span id="year"></span> MyApp — All rights reserved.
-        </footer>
-      </main>
+      <div id="users"></div>
     </div>
   </div>
 
