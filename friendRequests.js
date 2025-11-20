@@ -1,5 +1,5 @@
 import { arrayRemove, arrayUnion, auth, collection, db, doc, getDoc, getDocs, onAuthStateChanged, query, signOut, updateDoc, where } from "./config.js";
-
+let mains = document.getElementById("mains");
 let friendRequestsContainer = document.getElementById("friendRequests")
 function getUser() {
     onAuthStateChanged(auth, (user) => {
@@ -8,7 +8,7 @@ function getUser() {
             // https://firebase.google.com/docs/reference/js/auth.user
             const uid = user.uid;
             console.log("ye user login he abhi", user)
-              getFriendRequest(uid)
+              currentUsersData(uid)
             // ...
         } else {
             // User is signed out
@@ -17,6 +17,52 @@ function getUser() {
             // ...
         }
     });
+}
+async function currentUsersData(currentUserId) {
+    try {
+        const docRef = doc(db, "users", currentUserId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            const { firstName, lastName } = data;
+
+            // Yahan hum Header set kar rahe hain aur neeche "users" ka div bana rahe hain
+            // Taake baad mein getUsers function us div mein cards daal sake
+            mains.innerHTML = `
+                <!-- HEADER START -->
+                <header class="flex items-center justify-between bg-white px-4 py-3 border-b mb-6">
+                    <div class="flex items-center gap-4">
+                        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md hover:bg-gray-100">☰</button>
+                        <h2 class="text-lg font-semibold">Users</h2>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="relative">
+                            <input type="text" placeholder="Search..." class="hidden sm:block w-64 px-3 py-2 border rounded-md focus:outline-none focus:ring" />
+                        </div>
+                        <button class="p-2 rounded-full hover:bg-gray-100">🔔</button>
+                        <div class="flex items-center gap-2">
+                            <img src="https://avatars.githubusercontent.com/u/53353729?v=4" alt="avatar" class="w-8 h-8 rounded-full" />
+                            <!-- YAHAN HUMNE NAAM CHANGE KIYA HAI -->
+                            <span class="hidden sm:inline-block text-sm ">${firstName} ${lastName}</span>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- USERS LIST CONTAINER (Jahan cards ayenge) -->
+                <div id="users" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
+            `;
+
+            // Header banne ke baad ab hum baaki users ko load karenge
+            getFriendRequest(currentUserId);
+
+        } else {
+            console.log("Current user ka data nahi mila");
+        }
+    } catch (error) {
+        console.log("Error getting current user:", error);
+    }
 }
 async function getFriendRequest(currentUserId){
 const docRef = doc(db, "users", currentUserId);
@@ -34,8 +80,6 @@ const {friendRequest} = currentUserData
 console.log(friendRequest)
 if (!friendRequest || friendRequest.length === 0) {
         console.log("No friend requests, skipping query.");
-        
-       
         friendRequestsContainer.innerHTML = `<p class="text-center text-gray-500">Koi friend request nahi hai.</p>`;
         return; 
     }
@@ -52,16 +96,12 @@ const querySnapshot = await getDocs(q);
 <div class="avatar w-16 h-16 rounded-xl flex-shrink-0 avatar-gradient overflow-hidden flex items-center justify-center text-white font-semibold text-lg">
 <img src="https://i.pravatar.cc/160?img=56" alt="User avatar" class="w-full h-full object-cover rounded-xl" loading="lazy">
 </div>
-
-
 <div class="flex-1 min-w-0">
 <div class="flex items-center justify-between">
 <div>
 <h3 class="text-gray-900 font-medium truncate">${firstName+" " +lastName}</h3>
 <p class="text-xs text-gray-500 truncate">Frontend Dev · Islamabad</p>
 </div>
-
-
 <div class="text-right">
 <span class="text-xs text-gray-400 font-medium status-badge">Not friends</span>
 </div>
@@ -95,7 +135,7 @@ window.handleAcceptFriend=async(friendId , currentUserId)=>{
 try{
    const usersRef = doc(db, "users", friendId );
 
-// Atomically add a new region to the "regions" array field.
+
 await updateDoc(usersRef, {
     Friends: arrayUnion(currentUserId)
 });
@@ -105,13 +145,12 @@ await updateDoc(myRef, {
     friendRequest: arrayRemove(friendId),
     friends: arrayUnion(friendId)
 });
- let FriendCards = document.getElementById("Friend-cards");
- FriendCards.innerHTML = "" 
 
 }catch(error){
 console.log(error)
 }
-
+ let friendRequestsContainer = document.getElementById("friendRequests");
+ friendRequestsContainer.innerHTML = ""
 
 }
 window.handleDeclineFriend = async (friendId, currentUserId) => {
@@ -125,8 +164,8 @@ window.handleDeclineFriend = async (friendId, currentUserId) => {
 
         console.log(`Friend request from ${friendId} declined successfully.`);
 
-         let FriendCards = document.getElementById("Friend-cards");
- FriendCards.innerHTML = "" 
+         let friendRequestsContainer = document.getElementById("friendRequests");
+ friendRequestsContainer.innerHTML = "" 
 
     } catch (error) {
         console.error("Error declining friend request:", error);

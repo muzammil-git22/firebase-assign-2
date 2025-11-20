@@ -6,9 +6,7 @@ function getUser() {
     onAuthStateChanged(auth, (user) => {
         if (user) {
             const uid = user.uid;
-            console.log("User login hai:", uid);
-            
-            // Pehle current user ka data layenge aur Header banayenge
+            console.log("User login hai:", user);
             currentUsersData(uid);
             
         } else {
@@ -17,8 +15,6 @@ function getUser() {
         }
     });
 }
-
-// 1. LOGIN USER KA DATA + HEADER SHOW KARNE KA FUNCTION
 async function currentUsersData(currentUserId) {
     try {
         const docRef = doc(db, "users", currentUserId);
@@ -65,86 +61,122 @@ async function currentUsersData(currentUserId) {
         console.log("Error getting current user:", error);
     }
 }
+// Baki imports wese hi rahenge...
 
-// 2. BAAKI USERS KI LIST SHOW KARNE KA FUNCTION
+// 1. GET USERS FUNCTION (Isme check laga diya hai ke button kab dikhana hai)
 async function getUsers(currentUserId) {
     let userContainer = document.getElementById("users");
-    
-    // Safety check
-    if (!userContainer) return;
-
-    userContainer.innerHTML = ""; // Purana data saaf karein
+    userContainer.innerHTML = ""; 
     
     const q = query(collection(db, "users"), where("userId", "!=", currentUserId));
+    const querySnapshot = await getDocs(q);
     
-    try {
-        const querySnapshot = await getDocs(q);
-        
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const { firstName, lastName } = data || {};
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const { firstName, lastName, friendRequest } = data || {};
 
-            // ID attribute hata kar sirf class rakhi hai taake duplicate ID ka error na aye
-            userContainer.innerHTML += `
-            <div class="friend-card bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow" data-user-id="${doc.id}">
-                <div class="flex items-center gap-3">
-                    <div class="avatar w-16 h-16 rounded-xl flex-shrink-0 avatar-gradient overflow-hidden flex items-center justify-center text-white font-semibold text-lg">
-                        <img src="https://i.pravatar.cc/160?img=${Math.floor(Math.random() * 5)}" alt="User avatar" class="w-full h-full object-cover rounded-xl" loading="lazy">
+        // CHECK: Kya current user ne pehle se request bheji hui hai?
+        // Agar friendRequest array exist karta hai aur usme currentUserId hai, to true
+        const isRequestAlreadySent = friendRequest && friendRequest.includes(currentUserId);
+
+        // Agar request nahi bheji, tabhi button banayenge
+        // Humne button code ko ek variable mein rakha hai
+        let actionButton = "";
+        
+        if (!isRequestAlreadySent) {
+            // Agar request nahi bheji to Button show karo
+            // Note: Button ko ek unique ID di hai: id="btn-add-${doc.id}"
+            actionButton = `
+            <button id="btn-add-${doc.id}" onClick="handleAddFriend('${doc.id}' , '${currentUserId}')" class="btn-add inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-indigo-600 text-indigo-600 text-sm font-medium shadow-sm hover:bg-indigo-50 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Add Friend
+            </button>`;
+        } else {
+            // Agar request bheji hui hai to 'Request Sent' likha aye (Optional)
+            actionButton = `<span class="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded">Request Sent</span>`;
+        }
+
+        userContainer.innerHTML += `
+        <div class="friend-card bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow" data-user-id="${doc.id}">
+            <div class="flex items-center gap-3">
+                <div class="avatar w-16 h-16 rounded-xl flex-shrink-0 avatar-gradient overflow-hidden flex items-center justify-center text-white font-semibold text-lg">
+                    <img src="https://i.pravatar.cc/160?img=${Math.floor(Math.random() * 5)}" alt="User avatar" class="w-full h-full object-cover rounded-xl" loading="lazy">
+                </div>
+
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-gray-900 font-medium truncate">${firstName} ${lastName}</h3>
+                            <p class="text-xs text-gray-500 truncate">Frontend Dev · Islamabad</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-400 font-medium status-badge">Not friends</span>
+                        </div>
                     </div>
 
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="text-gray-900 font-medium truncate">${firstName} ${lastName}</h3>
-                                <p class="text-xs text-gray-500 truncate">Frontend Dev · Islamabad</p>
-                            </div>
+                    <p class="mt-2 text-sm text-gray-500 truncate">2 mutual friends</p>
 
-                            <div class="text-right">
-                                <span class="text-xs text-gray-400 font-medium status-badge">Not friends</span>
-                            </div>
-                        </div>
+                    <div class="mt-3 flex items-center gap-2">
+                        <!-- Yahan wo variable use kiya hai -->
+                        ${actionButton}
 
-                        <p class="mt-2 text-sm text-gray-500 truncate">2 mutual friends</p>
-
-                        <div class="mt-3 flex items-center gap-2">
-                            <button onClick="handleAddFriend('${doc.id}' , '${currentUserId}')" class="btn-add inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-indigo-600 text-indigo-600 text-sm font-medium shadow-sm hover:bg-indigo-50 transition">
-                                Add Friend
-                            </button>
-
-                            <button onClick="handleRemoveFriend('${doc.id}' , '${currentUserId}')" class="btn-message inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 text-sm text-gray-700 hover:bg-gray-200 transition">
-                                Remove
-                            </button>
-                        </div>
+                        <button onClick="handleRemoveFriend('${doc.id}' , '${currentUserId}')" class="btn-message inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 text-sm text-gray-700 hover:bg-gray-200 transition">
+                            Remove
+                        </button>
                     </div>
                 </div>
-            </div>`;
-        });
-    } catch (error) {
-        console.log(error);
-    }
+            </div>
+        </div>`;
+    });
 }
 
-// 3. FRIEND REQUEST HANDLERS
+// 2. HANDLE ADD FRIEND (Button click par remove karne wala logic)
 window.handleAddFriend = (friendId, currentUserId) => {
     console.log(`Sending friend request from ${currentUserId} to ${friendId}`);
+    
+    // UI Optimization: Click karte hi button disable kar dein taake user double click na kare
+    const btn = document.getElementById(`btn-add-${friendId}`);
+    if(btn) {
+        btn.innerText = "Sending...";
+        btn.disabled = true;
+    }
+
     const userRef = doc(db, 'users', friendId);
+    
     updateDoc(userRef, { friendRequest: arrayUnion(currentUserId) })
-        .then(() => {
-            alert("Friend Request Sent Successfully!");
-        })
-        .catch((error) => {
-            console.error("Error sending request: ", error);
-            alert("Failed to send request.");
-        });
+    .then(() => {
+        // Success hone par alert
+        alert("Friend Request Sent Successfully!");
+
+        // --- MAIN LOGIC: Button ko remove karna ---
+        if (btn) {
+            // Button ki jagah text likh dein ya poora remove kar dein
+            // Option A: Poora Remove karna:
+            // btn.remove(); 
+            
+            // Option B (Behtar): Button ki jagah "Request Sent" likhna
+            btn.outerHTML = `<span class="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded">Request Sent</span>`;
+        }
+    })
+    .catch((error) => {
+        console.error("Error sending request: ", error);
+        alert("Failed to send request.");
+        // Agar fail ho jaye to button wapis sahi kar dein
+        if(btn) {
+            btn.innerText = "Add Friend";
+            btn.disabled = false;
+        }
+    });
 }
 
 window.handleRemoveFriend = async (friendId, currentUserId) => {
     console.log(`Removing friend/request: Current User ID: ${currentUserId}, Target ID: ${friendId}`);
     try {
-        const friendRef = doc(db, 'users', friendId);
-        // NOTE: Yahan field ka naam 'friendRequest' hona chahiye, 'friendRemove' nahi
+        const friendRef = doc(db, 'users', currentUserId);
         await updateDoc(friendRef, {
-            friendRequest: arrayRemove(currentUserId)
+            friendRequest: arrayRemove(friendId)
         });
 
         console.log("Database updated successfully");
