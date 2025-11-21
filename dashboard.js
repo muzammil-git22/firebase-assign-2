@@ -50,12 +50,11 @@ async function currentUsersData(currentUserId) {
                     </div>
                     <button class="p-2 rounded-full hover:bg-gray-100">🔔</button>
                     <div class="flex items-center gap-2">
-                        <img src="https://avatars.githubusercontent.com/u/53353729?v=4" alt="avatar" class="w-8 h-8 rounded-full" />
+                        <img onClick="Images()" src="https://avatars.githubusercontent.com/u/53353729?v=4" alt="avatar" class="w-8 h-8 rounded-full" />
                         <span id="names" class="hidden sm:inline-block text-sm">${firstName+" "+lastName}</span>
                     </div>
                 </div>
             </header>
-
             <!-- Content container -->
             <main class="p-6 overflow-auto">
 
@@ -150,7 +149,10 @@ async function currentUsersData(currentUserId) {
     } catch (error) {
         console.error("Error fetching user data:", error);
     }
+  
 }
+
+
 getUser()
 
 // small scripts for demo behavior

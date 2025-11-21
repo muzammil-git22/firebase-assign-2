@@ -67,74 +67,7 @@
 
             <!-- Topbar -->
 
-            <div id="Settings" class="m-5">
-<div class="p-6 sm:p-8 bg-white shadow-xl rounded-lg max-w-4xl mx-auto">
-    <h2 class="text-3xl font-bold text-gray-900 mb-8 border-b pb-4">Account Settings</h2>
-
-    <div class="border-b border-gray-200 mb-6">
-        <nav class="-mb-px flex space-x-8" id="settings-tabs">
-            <a href="#" data-tab="profile" class="tab-link border-b-2 border-transparent text-sm font-medium py-2 px-1 text-indigo-600 hover:text-indigo-800 hover:border-indigo-600 active-tab">Profile</a>
-            <a href="#" data-tab="security" class="tab-link border-b-2 border-transparent text-sm font-medium py-2 px-1 text-gray-500 hover:text-gray-700 hover:border-gray-300">Security</a>
-            <a href="#" data-tab="notifications" class="tab-link border-b-2 border-transparent text-sm font-medium py-2 px-1 text-gray-500 hover:text-gray-700 hover:border-gray-300">Notifications</a>
-        </nav>
-    </div>
-
-    <div class="tab-content" id="tab-profile">
-        <h3 class="text-2xl font-semibold text-gray-900 mb-4">Personal Information</h3>
-        <form id="profileForm">
-            <div class="space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label for="setting-first-name" class="block text-sm font-medium text-gray-700">First Name</label>
-                        <input type="text" id="setting-first-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" value="John">
-                    </div>
-                    <div>
-                        <label for="setting-last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
-                        <input type="text" id="setting-last-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" value="Doe">
-                    </div>
-                </div>
-                
-                <div>
-                    <label for="setting-email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="email" id="setting-email" readonly class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-gray-100 cursor-not-allowed" value="john.doe@example.com">
-                </div>
-
-                <div>
-                    <label for="setting-bio" class="block text-sm font-medium text-gray-700">About Me</label>
-                    <textarea id="setting-bio" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">I am a developer.</textarea>
-                </div>
-            </div>
-            <div class="mt-6 flex justify-end">
-                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Save Profile Changes
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <div class="tab-content hidden" id="tab-security">
-        <h3 class="text-2xl font-semibold text-gray-900 mb-4">Security and Password</h3>
-        <form id="securityForm">
-            <div class="space-y-6">
-                <div>
-                    <label for="setting-current-password" class="block text-sm font-medium text-gray-700">Current Password</label>
-                    <input type="password" id="setting-current-password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                <div>
-                    <label for="setting-new-password" class="block text-sm font-medium text-gray-700">New Password</label>
-                    <input type="password" id="setting-new-password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-                <div>
-                    <label for="setting-confirm-password" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
-                    <input type="password" id="setting-confirm-password" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-            </div>
-            <div class="mt-6 flex justify-end">
-                <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                    Change Password
-                </button>
-            </div>
-        </form>
+         
     </div>
 
     <div class="tab-content hidden" id="tab-notifications">
